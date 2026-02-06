@@ -1,10 +1,9 @@
-use inputbot::{KeySequence, KeybdKey::*, MouseButton::*};
-use rustautogui::RustAutoGui;
+use inputbot::{KeybdKey::*, MouseButton::*};
 use std::{thread::sleep, time::Duration};
 
 fn main() {
-    let mut rustautogui = RustAutoGui::new(false);
-    X1Button.bind(move || {
+    X2Button.bind(move || {
+        println!("Activated macro.");
         while !X1Button.is_pressed() {
             LeftButton.press();
             LeftButton.release();
@@ -14,5 +13,9 @@ fn main() {
             FKey.release();
             sleep(Duration::from_millis(4));
         }
+        println!("Deactivated macro.");
     });
+
+    println!("Macro is ready!");
+    inputbot::handle_input_events();
 }
