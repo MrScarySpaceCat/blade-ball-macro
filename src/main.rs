@@ -4,8 +4,8 @@ use std::{
     time::Duration,
 };
 
-use enigo::{Enigo, Key as EnigoKey, KeyboardControllable};
-use rdev::{Event, EventType, Key, listen};
+use enigo::{Direction::Press, Enigo, Key as EnigoKey, Keyboard, Settings};
+use rdev::{Button, EventType, listen};
 
 /// Are we currently running the macro?
 static RUNNING: AtomicBool = AtomicBool::new(false);
@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     listen(move |event| {
         match event.event_type {
             // ------------- X2: start -------------------------------------------------
-            EventType::KeyPress(Key::KeyX2) => {
+            EventType::ButtonPress(Button::Unknown(0x06)) => {
                 // only start if we’re not already running
                 if !RUNNING.load(Ordering::SeqCst) {
                     RUNNING.store(true, Ordering::SeqCst);
@@ -30,12 +30,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                     // Create the key‑sending thread.
                     thread::spawn(|| {
-                        let mut enigo = Enigo::new({});
+                        let mut enigo = Enigo::new(&Settings::default()).unwrap();
 
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
-                            enigo.key_click(EnigoKey::E);
-                            enigo.key_click(EnigoKey::F);
+                            enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
+                            enigo.key(EnigoKey::Unicode('f'), Press).unwrap();
                             thread::sleep(Duration::from_millis(4));
                         }
 
@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // ------------- X1: stop --------------------------------------------------
-            EventType::KeyPress(Key::KeyX1) => {
+            EventType::KeyPress(Button::Unknown(0x05)) => {
                 if RUNNING.load(Ordering::SeqCst) {
                     STOP.store(true, Ordering::SeqCst);
                 }
@@ -55,10 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             _ => {}
         }
-
-        // Let the event propagate unchanged (no suppression)
-        Some(event)
-    })?;
+    });
 
     Ok(())
 }
