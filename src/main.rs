@@ -4,7 +4,7 @@ use std::{
     time::Duration,
 };
 
-use enigo::{Direction::Press, Enigo, Key as EnigoKey, Keyboard, Settings};
+use enigo::{Button as EnigoButton, Direction::Press, Enigo, Key as EnigoKey, Keyboard, Settings};
 use rdev::{EventType, Key, listen};
 
 /// Are we currently running the macro?
@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     listen(move |event| {
         match event.event_type {
             // ------------- X2: start -------------------------------------------------
-            EventType::KeyPress(Key::Unknown(0x06)) => {
+            EventType::KeyPress(Key::RawKey(EnigoButton::Back)) => {
                 // only start if we’re not already running
                 if !RUNNING.load(Ordering::SeqCst) {
                     RUNNING.store(true, Ordering::SeqCst);
@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // ------------- X1: stop --------------------------------------------------
-            EventType::KeyPress(Key::Unknown(0x05)) => {
+            EventType::KeyPress(Key::RawKey(EnigoButton::Forward)) => {
                 if RUNNING.load(Ordering::SeqCst) {
                     STOP.store(true, Ordering::SeqCst);
                 }
