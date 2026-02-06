@@ -5,7 +5,7 @@ use std::{
 };
 
 use enigo::{Direction::Press, Enigo, Key as EnigoKey, Keyboard, Settings};
-use rdev::{Button, EventType, listen};
+use rdev::{EventType, Key, listen};
 
 /// Are we currently running the macro?
 static RUNNING: AtomicBool = AtomicBool::new(false);
@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     listen(move |event| {
         match event.event_type {
             // ------------- X2: start -------------------------------------------------
-            EventType::ButtonPress(Button::Unknown(0x06)) => {
+            EventType::KeyPress(Key::Unknown(0x06)) => {
                 // only start if we’re not already running
                 if !RUNNING.load(Ordering::SeqCst) {
                     RUNNING.store(true, Ordering::SeqCst);
@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // ------------- X1: stop --------------------------------------------------
-            EventType::ButtonPress(Button::Unknown(0x05)) => {
+            EventType::KeyPress(Key::Unknown(0x05)) => {
                 if RUNNING.load(Ordering::SeqCst) {
                     STOP.store(true, Ordering::SeqCst);
                 }
