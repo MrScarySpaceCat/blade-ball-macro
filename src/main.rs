@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             // ------------- X1: stop --------------------------------------------------
-            EventType::KeyPress(Button::Unknown(0x05)) => {
+            EventType::ButtonPress(Button::Unknown(0x05)) => {
                 if RUNNING.load(Ordering::SeqCst) {
                     STOP.store(true, Ordering::SeqCst);
                 }
