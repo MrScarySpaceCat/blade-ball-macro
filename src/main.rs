@@ -4,16 +4,15 @@ use std::{
     time::Duration,
 };
 
-use enigo::{
-    Direction::{Click, Press, Release},
-    Enigo, Key as EnigoKey, Keyboard, Settings,
-};
+use enigo::{Direction::Click, Enigo, Key as EnigoKey, Keyboard, Settings};
 use rdev::{Button, EventType, listen};
 
 /// Are we currently running the macro?
 static RUNNING: AtomicBool = AtomicBool::new(false);
 /// “Stop” flag that the background thread checks each cycle.
 static STOP: AtomicBool = AtomicBool::new(false);
+
+static PAUSE_MILLIS: u64 = 10;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ------------------------------------------------------------
@@ -37,9 +36,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
-                            // enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
+                            // enigo.key(EnigoKey::Unicode('e'), Click).unwrap();
                             enigo.key(EnigoKey::Unicode('f'), Click).unwrap();
-                            thread::sleep(Duration::from_millis(20));
+                            thread::sleep(Duration::from_millis(PAUSE_MILLIS));
                         }
 
                         // Clean‑up after the loop
