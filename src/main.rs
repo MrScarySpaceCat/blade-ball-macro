@@ -16,7 +16,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ------------------------------------------------------------
     // Global listener – reacts to X2 (start) and X1 (stop)
     // ------------------------------------------------------------
-    println!("Macro ready! Press X2 to start, X1 to stop.");
+    println!("Macro ready! Hold Mouse5? to use the macro.");
 
     listen(move |event| {
         match event.event_type {
