@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         while !STOP.load(Ordering::SeqCst) {
                             // enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
                             enigo.key(EnigoKey::Unicode('f'), Press).unwrap();
-                            thread::yield_now();
+                            thread::sleep(Duration::from_millis(20));
                         }
 
                         // Clean‑up after the loop
