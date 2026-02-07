@@ -2,5 +2,4 @@
 Making this for my friends smh
 
 Current keybinds:
-- Mouse4: start macro
-- Mouse5: stop macro
+- Hold Mouse5: use macro
