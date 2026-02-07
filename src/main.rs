@@ -34,19 +34,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
-                            enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
+                            // enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
                             enigo.key(EnigoKey::Unicode('f'), Press).unwrap();
-                            thread::sleep(Duration::from_millis(4));
+                            thread::yield_now();
                         }
 
                         // Clean‑up after the loop
                         RUNNING.store(false, Ordering::SeqCst);
                         println!("Deactivated macro.");
                     });
-                } else {
-                    if RUNNING.load(Ordering::SeqCst) {
-                        STOP.store(true, Ordering::SeqCst);
-                    }
+                }
+            }
+
+            EventType::ButtonRelease(Button::Unknown(1)) => {
+                if RUNNING.load(Ordering::SeqCst) {
+                    STOP.store(true, Ordering::SeqCst);
                 }
             }
 
