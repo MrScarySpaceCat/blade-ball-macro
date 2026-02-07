@@ -4,7 +4,10 @@ use std::{
     time::Duration,
 };
 
-use enigo::{Direction::Press, Enigo, Key as EnigoKey, Keyboard, Settings};
+use enigo::{
+    Direction::{Click, Press, Release},
+    Enigo, Key as EnigoKey, Keyboard, Settings,
+};
 use rdev::{Button, EventType, listen};
 
 /// Are we currently running the macro?
@@ -35,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
                             // enigo.key(EnigoKey::Unicode('e'), Press).unwrap();
-                            enigo.key(EnigoKey::Unicode('f'), Press).unwrap();
+                            enigo.key(EnigoKey::Unicode('f'), Click).unwrap();
                             thread::sleep(Duration::from_millis(20));
                         }
 
