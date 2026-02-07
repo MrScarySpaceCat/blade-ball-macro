@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     listen(move |event| {
         match event.event_type {
             // ------------- X2: start -------------------------------------------------
-            EventType::ButtonPress(Button::Unknown(2)) => {
+            EventType::ButtonPress(Button::Unknown(1)) => {
                 // only start if we’re not already running
                 if !RUNNING.load(Ordering::SeqCst) {
                     RUNNING.store(true, Ordering::SeqCst);
@@ -43,13 +43,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         RUNNING.store(false, Ordering::SeqCst);
                         println!("Deactivated macro.");
                     });
-                }
-            }
-
-            // ------------- X1: stop --------------------------------------------------
-            EventType::ButtonPress(Button::Unknown(1)) => {
-                if RUNNING.load(Ordering::SeqCst) {
-                    STOP.store(true, Ordering::SeqCst);
+                } else {
+                    if RUNNING.load(Ordering::SeqCst) {
+                        STOP.store(true, Ordering::SeqCst);
+                    }
                 }
             }
 
