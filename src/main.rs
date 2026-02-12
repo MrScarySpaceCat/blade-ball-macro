@@ -12,7 +12,7 @@ static RUNNING: AtomicBool = AtomicBool::new(false);
 /// “Stop” flag that the background thread checks each cycle.
 static STOP: AtomicBool = AtomicBool::new(false);
 
-static PAUSE_MILLIS: u64 = 5;
+static PAUSE_MILLIS: u64 = 2;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // ------------------------------------------------------------
@@ -36,8 +36,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
-                            enigo.key(EnigoKey::Unicode('e'), Click).unwrap();
-                            thread::sleep(Duration::from_millis(PAUSE_MILLIS));
+                            // enigo.key(EnigoKey::Unicode('e'), Click).unwrap();
+                            // thread::sleep(Duration::from_millis(PAUSE_MILLIS));
                             enigo.key(EnigoKey::Unicode('f'), Click).unwrap();
                             thread::sleep(Duration::from_millis(PAUSE_MILLIS));
                         }
@@ -57,7 +57,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             _ => {}
         }
-    });
+    })
+    .unwrap();
 
     Ok(())
 }
