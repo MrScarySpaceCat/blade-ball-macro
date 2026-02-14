@@ -18,8 +18,9 @@ static PAUSE_MICROS: AtomicU64 = AtomicU64::new(10000);
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     print!("Enter desired keys per second: ");
 
-    let kps: u64 = read!("{}\n");
-    let wait_micros: u64 = 1000000 / kps;
+    let kps_str: String = read!("{}\n");
+    let kps_num: u64 = kps_str.replace("\r", "").parse::<u64>()?;
+    let wait_micros: u64 = 1000000 / kps_num;
 
     PAUSE_MICROS.store(wait_micros, Ordering::SeqCst);
     // ------------------------------------------------------------
