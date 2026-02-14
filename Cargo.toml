@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 enigo = { version = "0.6.1" }
 rdev = { git = "https://github.com/rustdesk-org/rdev" }
+text_io = { version = "0.1.13" }
