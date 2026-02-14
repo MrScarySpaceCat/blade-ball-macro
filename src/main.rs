@@ -42,12 +42,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     thread::spawn(|| {
                         let mut enigo = Enigo::new(&Settings::default()).unwrap();
 
-                        let micros = PAUSE_MICROS.load(Ordering::SeqCst);
+                        let micros: u64 = PAUSE_MICROS.load(Ordering::SeqCst);
 
                         // Keep spamming E+F while X1 remains pressed
                         while !STOP.load(Ordering::SeqCst) {
-                            // enigo.key(EnigoKey::Unicode('e'), Click).unwrap();
-                            // thread::sleep(Duration::from_millis(PAUSE_MILLIS));
+                            enigo.key(EnigoKey::Unicode('e'), Click).unwrap();
+                            thread::sleep(Duration::from_micros(micros));
                             enigo.key(EnigoKey::Unicode('f'), Click).unwrap();
                             thread::sleep(Duration::from_micros(micros));
                         }
